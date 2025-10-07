@@ -17,5 +17,20 @@ export default function QueryProcessor(query: string): string {
     );
   }
 
+  const addMatch = query.match(/(\d+)\s*(?:\+|plus)\s*(\d+)/i);
+  if (addMatch) {
+    const num1 = parseFloat(addMatch[1]);
+    const num2 = parseFloat(addMatch[2]);
+    return `${num1 + num2}`;
+  }
+
+  // Case 2: find the largest number (e.g. "Which of the following numbers is the largest: 25, 6, 63?")
+  const numbersMatch = query.match(/[-]?\d+(\.\d+)?/g);
+  if (query.toLowerCase().includes("largest") && numbersMatch) {
+    const numbers = numbersMatch.map(Number);
+    const largest = Math.max(...numbers);
+    return `${largest}`;
+  }
+
   return "";
 }
